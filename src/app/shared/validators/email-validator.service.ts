@@ -8,14 +8,40 @@ export class EmailValidator implements AsyncValidator {
     validate(control: AbstractControl): Observable<ValidationErrors | null> {
 
         const email = control.value;
+
+        const httpCallObservable = new Observable<ValidationErrors|null>( (subscriber) => {
+
+            console.log({ email });
+
+            if ( email === 'gabriela@qmarketing.mx' ) {
+                subscriber.next({ emailTaken: true });
+                subscriber.complete();
+                return;
+            }
+
+            subscriber.next(null);
+            subscriber.complete();
+            return;
+
+        }).pipe(
+            delay( 3000 )
+        );
+    
+        return httpCallObservable;
+    }
+
+    /*
+    validate(control: AbstractControl): Observable<ValidationErrors | null> {
+
+        const email = control.value;
         console.log({ email });
         return of ({
             emailTaken: true,
         }).pipe(
             delay( 2000 )
         );
-        //throw new Error('Method not implemented.');
     }
+    */
     
 
 }
